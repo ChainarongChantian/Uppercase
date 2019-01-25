@@ -1,37 +1,58 @@
+console.log(greet(["Bob", "\"Charlie, Dianne\""]))
 function greet(name) {
-    if(name == null) {
-        return "Hello, my friend.";
+    if(name == null) { 
+        return "Hello, my friend."
     }
-    if(Array.isArray(name)) {
-        var res;
-        for(var i=0;i<name.length;i++) {
-            res = name[i] == name[i].toUpperCase();
-            if(res == true) {
-                capUpper = name[i];
-                break;
-            }    
-        }
-        if(res == true) {
-            var res = name.join(" ");
-            var t = res.split(capUpper);
-            return `Hello, ${t}`;
-        }
-        else if(res == false) {
-            if(name.length > 2) {
-                var nmfirst = name.slice(0,2).join(", ")+",";
-                var nmlast = name.slice(2,3);
-                return `Hello, ${nmfirst} and ${nmlast}.`;
+    else if(Array.isArray(name)) {
+        if(name.length > 2) {
+            var getUpper
+            var listwithOutUpper = name.filter(function(name) {
+                if(name == name.toUpperCase()) {
+                    getUpper = name
+                }   
+                return name != name.toUpperCase()
+            }).join(" and ")
+
+            if(getUpper != undefined) {
+                return `Hello, ${listwithOutUpper}. AND HELLO ${getUpper}!`
             }
-            else if(name.length == 2){
-                var nm = name.join(" and ");
-                return `Hello, ${nm}.`;
+            else {
+                var nmfirst = name.slice(0,2).join(", ")+","
+                var nmlast = name.slice(2,3)
+                return `Hello, ${nmfirst} and ${nmlast}.`
             }
         }
+        else  {
+            if(name.join(" ").includes("\"")) {
+                var s = name.filter(name => name.includes(", "))+""
+                var getText
+                name.forEach(function cutInList(textName, index) {
+                    if(s == textName) {
+                        getText = name.splice(name[index],1)
+                    }
+                })
+                return `Hello, ${getText} and ${s.replace(/['"]+/g,"")}.`
+            }
+            else if(name.join(" ").includes(", ")) {
+                var s = name.filter(name => name.includes(", "))+""
+                var getText
+                name.forEach(function cutInList(textName, index) {
+                    if(s == textName) {
+                        getText = name.splice(name[index],1)
+                    }
+                })
+                return `Hello, ${getText}, ${s.replace(",",", and")}.`
+            }
+            else {
+                var nm = name.join(" and ")
+                return `Hello, ${nm}.`
+            }
+        }
     }
-    if(name == name.toUpperCase()) {
-        return `Hello, ${name}!`;
+    else if(name == name.toUpperCase()) {
+        return `Hello, ${name}!`
     }
-    return `Hello, ${name}.`;
+    return `Hello, ${name}.`
 }
 
-module.exports = greet;
+module.exports = greet
